@@ -1,0 +1,26 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.kevinsolis.appbility.activities.ProfileActivity">
+
+    <item
+        android:id="@+id/menu_option_account"
+        android:title="Mi cuenta"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/nav_option_change_connection"
+        android:title="Configuración de conexión"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_option_delete_all"
+        android:title="Borrar todo"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_option_about"
+        android:title="Acerca de la App"
+        app:showAsAction="never" />
+
+</menu>

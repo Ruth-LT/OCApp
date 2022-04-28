@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.kevinsolis.appbility.activities.ChangeConnectionActivity">
+
+    <item
+        android:id="@+id/menu_option_system"
+        android:orderInCategory="100"
+        android:title="Obtener datos desde el Sistema"
+        app:showAsAction="never" />
+
+</menu>

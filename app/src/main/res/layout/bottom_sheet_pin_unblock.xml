@@ -1,0 +1,55 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottomSheet"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_bottom_sheet"
+    android:orientation="vertical"
+    app:behavior_hideable="true"
+    app:behavior_peekHeight="64dp"
+    app:layout_behavior="@string/bottom_sheet_behavior">
+
+  <ImageView
+      android:id="@+id/imgBar"
+      android:layout_width="wrap_content"
+      android:layout_height="5dp"
+      android:layout_margin="5dp"
+      android:src="@drawable/bar_gray" />
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_margin="15dp"
+      android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/txtViewInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:text="Por seguridad, esta función está deshabilitada y para poder utilizarla debe colocar el PIN que puede solicitar a sus supervisores. Solo se solicitará una vez."
+        android:textAlignment="viewStart"
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/editTxtPIN"
+        style="@style/Base.Widget.MaterialComponents.TextInputEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:ems="10"
+        android:hint="Clic aquí y escribe el PIN"
+        android:inputType="numberPassword"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/btnOk"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_btn_info"
+        android:text="Ok"
+        android:textColor="@android:color/white" />
+  </LinearLayout>
+
+</LinearLayout>

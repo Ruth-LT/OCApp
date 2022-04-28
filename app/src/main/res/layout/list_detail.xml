@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:foreground="?attr/selectableItemBackground"
+    android:paddingTop="20dp"
+    android:paddingBottom="20dp">
+
+    <TextView
+        android:id="@+id/txtViewArticle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:fontFamily="@font/montserrat"
+        android:text="Artículo"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/txtViewAmount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight=".6"
+        android:fontFamily="@font/montserrat"
+        android:text="Cantidad"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/txtViewPrice"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight=".6"
+        android:fontFamily="@font/montserrat"
+        android:text="P. Pactado"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/txtViewTotal"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight=".6"
+        android:fontFamily="@font/montserrat"
+        android:text="Importe"
+        android:textColor="@android:color/black" />
+</LinearLayout>

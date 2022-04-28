@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">DiCampo OC</string>
+
+    <string name="text_date_future">en el futuro</string>
+    <string name="text_date_rightnow">hace unos momentos</string>
+    <string name="text_date_xseconds">hace %1$s segundos</string>
+    <string name="text_date_minute">hace un minuto</string>
+    <string name="text_date_xminutes">hace %1$s minutos</string>
+    <string name="text_date_hour">hace una hora</string>
+    <string name="text_date_xhours">hace %1$s horas</string>
+    <string name="text_date_yesterday">ayer</string>
+    <string name="text_date_xdays">hace %1$s días</string>
+    <string name="text_date_xweeks">hace %1$s semanas</string>
+    <string name="text_date_xmonths">hace %1$s meses</string>
+    <string name="text_date_xyears">hace %1$s años</string>
+    <string name="text_date_lastweek">semana pasada</string>
+    <string name="text_date_lastmonth">mes pasado</string>
+    <string name="text_date_lastyear">año pasado</string>
+
+    <string name="text_date_future2">en el futuro</string>
+    <string name="text_date_rightnow2">Solo unos momentos</string>
+    <string name="text_date_xseconds2">%1$s segundos</string>
+    <string name="text_date_minute2">Un minuto</string>
+    <string name="text_date_xminutes2">%1$s minutos</string>
+    <string name="text_date_hour2">Una hora</string>
+    <string name="text_date_xhours2">%1$s horas</string>
+    <string name="text_date_yesterday2">Un día</string>
+    <string name="text_date_xdays2">%1$s días</string>
+    <string name="text_date_xweeks2">%1$s semanas</string>
+    <string name="text_date_xmonths2">%1$s meses</string>
+    <string name="text_date_xyears2">%1$s años</string>
+    <string name="text_date_lastweek2">Una semana</string>
+    <string name="text_date_lastmonth2">Un mes</string>
+    <string name="text_date_lastyear2">Un año</string>
+</resources>
