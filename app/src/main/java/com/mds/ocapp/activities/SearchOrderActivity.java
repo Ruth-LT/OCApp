@@ -76,7 +76,7 @@ public class SearchOrderActivity extends AppCompatActivity {
         editTxtDateStart = findViewById(R.id.editTxtDateStart);
         editTxtDateFinish = findViewById(R.id.editTxtDateFinish);
         recyclerViewOrders = findViewById(R.id.recyclerViewOrders);
-        txtViewFarmer = findViewById(R.id.txtViewFarmer);
+        txtViewFarmer = findViewById(R.id.txtViewProveedor);
         imgBtnSelectSupplier = findViewById(R.id.imgBtnSelectSupplier);
         checkBoxAll = findViewById(R.id.checkBoxAll);
         btnSearch = findViewById(R.id.btnSearch);
@@ -175,15 +175,15 @@ public class SearchOrderActivity extends AppCompatActivity {
                 ConnectionClass connectionClass = new ConnectionClass(this);
 
                 if (connectionClass.ConnectionMDS() != null) {
-                    PreparedStatement loComando = baseApp.execute_SP("EXECUTE DiCampo.dbo.CONSULTA_ORDENES ?, ?, ?, ?");
+                    PreparedStatement loComando = baseApp.execute_SP("EXECUTE ERP_CIE.dbo.Busca_Ordenes_Compra_Android ?, ?, ?, ?");
 
                     if (loComando == null) {
-                        baseApp.showSnackBar("Error al Crear SP CONSULTA_ORDENES");
+                        baseApp.showSnackBar("Error al Crear SP Busca_Ordenes_Compra_Android");
                     }else{
                         try {
 
                             loComando.setString(1, branchOfficeArrayList.get(spinnerBranchOffices.getSelectedItemPosition()).getSucursal());
-                            loComando.setString(2, (checkBoxAll.isChecked()) ? "%" : Integer.toString(spClass.intGetSP("nFarmer")));
+                            loComando.setString(2, (checkBoxAll.isChecked()) ? "%" : Integer.toString(spClass.intGetSP("nSupplier")));
                             loComando.setDate(3, baseApp.convertDateToSQLDate(baseApp.convertDate(baseApp.parseDateToddMMyyyy(editTxtDateStart.getText().toString()))));
                             loComando.setDate(4, baseApp.convertDateToSQLDate(baseApp.convertDate(baseApp.parseDateToddMMyyyy(editTxtDateFinish.getText().toString()))));
 
@@ -204,7 +204,7 @@ public class SearchOrderActivity extends AppCompatActivity {
                                                     Datos.getInt("orden_compra"),
                                                     Datos.getString("cFecha"),
                                                     Datos.getString("nombre_sucursal"),
-                                                    Datos.getString("agricultor"),
+                                                    Datos.getString("nombre_proveedor"),
                                                     Datos.getString("estado_actual")
                                             );
 

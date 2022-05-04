@@ -150,12 +150,7 @@ public class AddArticleActivity extends AppCompatActivity {
                                     article.getNombre_articulo(),
                                     nAmount,
                                     nPrice,
-                                    nAmount * nPrice,
-                                    0,
-                                    0,
-                                    0,
-                                    0,
-                                    0
+                                    nAmount * nPrice
                             )
                     );
                     realm.commitTransaction();

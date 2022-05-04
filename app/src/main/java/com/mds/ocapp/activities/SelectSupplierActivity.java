@@ -33,6 +33,7 @@ import com.mds.ocapp.application.ConnectionClass;
 import com.mds.ocapp.application.FunctionsApp;
 import com.mds.ocapp.application.SPClass;
 import com.mds.ocapp.models.City;
+import com.mds.ocapp.models.Classs;
 import com.mds.ocapp.models.Supplier;
 
 import java.sql.PreparedStatement;
@@ -56,11 +57,7 @@ public class SelectSupplierActivity extends AppCompatActivity {
     EditText editTxtSupplier, editTxtValue;
     Button btnAdd, btnSave;
     RecyclerView recyclerViewSuppliers;
-    LinearLayout layoutRadioGroup, layoutNoData;
-    RadioGroup radioGroup;
-
-    String cTypeSupplier;
-    RadioButton rBtnWe, rBtnFarmer, rBtnClient;
+    LinearLayout layoutNoData;
 
     Realm realm;
 
@@ -94,36 +91,16 @@ public class SelectSupplierActivity extends AppCompatActivity {
         imgIco = findViewById(R.id.imgIco);
 
         editTxtSupplier = findViewById(R.id.editTxtSupplier);
-        editTxtValue = findViewById(R.id.editTxtValue);
 
-        layoutRadioGroup = findViewById(R.id.layoutRadioGroup);
         layoutNoData = findViewById(R.id.layoutNoData);
         recyclerViewSuppliers = findViewById(R.id.recyclerViewSuppliers);
-
-        radioGroup = findViewById(R.id.radioGroup);
-        rBtnWe = findViewById(R.id.rBtnWe);
-        rBtnFarmer = findViewById(R.id.rBtnFarmer);
-        rBtnClient = findViewById(R.id.rBtnClient);
 
         btnAdd = findViewById(R.id.btnAdd);
         btnSave = findViewById(R.id.btnSave);
 
-        if (getIntent().getExtras() != null) {
-            cTypeSupplier = getIntent().getExtras().getString("cTypeSupplier");
-
-            if(cTypeSupplier != null){
-                cTypeSupplier = cTypeSupplier.trim();
-            }
-
-        } else {
-            cTypeSupplier = "";
-        }
-
-        layoutRadioGroup.setVisibility(View.VISIBLE);
         btnSave.setVisibility(View.VISIBLE);
 
         spClass.deleteSP("nSupplier");
-        spClass.strSetSP("cTypeSupplier", cTypeSupplier);
 
         setUI();
 
@@ -138,93 +115,6 @@ public class SelectSupplierActivity extends AppCompatActivity {
             }
         });
 
-        radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            switch(checkedId){
-                case R.id.rBtnWe:
-                    switch (cTypeSupplier){
-                        case "carrier":
-                            spClass.strSetSP("cTypeCarrier", "we");
-                            break;
-                        case "stevedore":
-                            spClass.strSetSP("cTypeStevedore", "we");
-                            break;
-                        case "curter":
-                            spClass.strSetSP("cTypeCurter", "we");
-                            break;
-                        case "comissionagent":
-                            spClass.strSetSP("cTypeComissionAgent", "we");
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-                case R.id.rBtnFarmer:
-                    switch (cTypeSupplier){
-                        case "carrier":
-                            spClass.strSetSP("cTypeCarrier", "farmer");
-                            break;
-                        case "stevedore":
-                            spClass.strSetSP("cTypeStevedore", "farmer");
-                            break;
-                        case "curter":
-                            spClass.strSetSP("cTypeCurter", "farmer");
-                            break;
-                        case "comissionagent":
-                            spClass.strSetSP("cTypeComissionAgent", "farmer");
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-                case R.id.rBtnClient:
-                    switch (cTypeSupplier){
-                        case "carrier":
-                            spClass.strSetSP("cTypeCarrier", "client");
-                            break;
-                        case "stevedore":
-                            spClass.strSetSP("cTypeStevedore", "client");
-                            break;
-                        case "curter":
-                            spClass.strSetSP("cTypeCurter", "client");
-                            break;
-                        case "comissionagent":
-                            spClass.strSetSP("cTypeComissionAgent", "client");
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-            }
-        });
-
-        editTxtValue.addTextChangedListener(new TextWatcher() {
-
-            public void afterTextChanged(Editable s) {}
-
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String value = s.toString();
-
-                switch (cTypeSupplier){
-                    case "carrier":
-                        spClass.strSetSP("nValueCarrier", value);
-                        break;
-                    case "stevedore":
-                        spClass.strSetSP("nValueStevedore", value);
-                        break;
-                    case "curter":
-                        spClass.strSetSP("nValueCurter", value);
-                        break;
-                    case "comissionagent":
-                        spClass.strSetSP("nValueComissionAgent", value);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
-
         btnAdd.setOnClickListener(v->showDialogAddSupplier());
         btnSave.setOnClickListener(v->save());
 
@@ -233,107 +123,6 @@ public class SelectSupplierActivity extends AppCompatActivity {
 
     public void setUI(){
         try{
-
-            switch (cTypeSupplier){
-                case "farmer":
-                    txtViewType.setText("Seleccione un agricultor");
-                    imgIco.setImageResource(R.drawable.ico_farmer);
-                    layoutRadioGroup.setVisibility(View.GONE);
-                    btnSave.setVisibility(View.GONE);
-                    break;
-                case "carrier":
-                    txtViewType.setText("Seleccione un transportista");
-                    imgIco.setImageResource(R.drawable.ico_carrier);
-
-                    switch (spClass.strGetSP("cTypeCarrier")){
-                        case "we":
-                            rBtnWe.setChecked(true);
-                            break;
-                        case "farmer":
-                            rBtnFarmer.setChecked(true);
-                            break;
-                        case "client":
-                            rBtnClient.setChecked(true);
-                        default:
-                            rBtnWe.setChecked(false);
-                            rBtnFarmer.setChecked(false);
-                            rBtnClient.setChecked(false);
-                            break;
-                    }
-
-                    editTxtValue.setText((!spClass.strGetSP("nValueCarrier").equals("ND") ? spClass.strGetSP("nValueCarrier") : ""));
-
-                    break;
-                case "stevedore":
-                    txtViewType.setText("Seleccione un estibador");
-                    imgIco.setImageResource(R.drawable.ico_lift_truck);
-
-                    switch (spClass.strGetSP("cTypeStevedore")){
-                        case "we":
-                            rBtnWe.setChecked(true);
-                            break;
-                        case "farmer":
-                            rBtnFarmer.setChecked(true);
-                            break;
-                        case "client":
-                            rBtnClient.setChecked(true);
-                        default:
-                            rBtnWe.setChecked(false);
-                            rBtnFarmer.setChecked(false);
-                            rBtnClient.setChecked(false);
-                            break;
-                    }
-
-                    editTxtValue.setText((!spClass.strGetSP("nValueStevedore").equals("ND") ? spClass.strGetSP("nValueStevedore") : ""));
-                    break;
-                case "curter":
-                    txtViewType.setText("Seleccione un cortador");
-                    imgIco.setImageResource(R.drawable.ico_agriculture);
-
-                    switch (spClass.strGetSP("cTypeCurter")){
-                        case "we":
-                            rBtnWe.setChecked(true);
-                            break;
-                        case "farmer":
-                            rBtnFarmer.setChecked(true);
-                            break;
-                        case "client":
-                            rBtnClient.setChecked(true);
-                        default:
-                            rBtnWe.setChecked(false);
-                            rBtnFarmer.setChecked(false);
-                            rBtnClient.setChecked(false);
-                            break;
-                    }
-
-                    editTxtValue.setText((!spClass.strGetSP("nValueCurter").equals("ND") ? spClass.strGetSP("nValueCurter") : ""));
-                    break;
-                case "comissionagent":
-                    txtViewType.setText("Seleccione un comisionista");
-                    imgIco.setImageResource(R.drawable.ico_negotiation);
-
-                    switch (spClass.strGetSP("cTypeComissionAgent")){
-                        case "we":
-                            rBtnWe.setChecked(true);
-                            break;
-                        case "farmer":
-                            rBtnFarmer.setChecked(true);
-                            break;
-                        case "client":
-                            rBtnClient.setChecked(true);
-                        default:
-                            rBtnWe.setChecked(false);
-                            rBtnFarmer.setChecked(false);
-                            rBtnClient.setChecked(false);
-                            break;
-                    }
-
-                    editTxtValue.setText((!spClass.strGetSP("nValueComissionAgent").equals("ND") ? spClass.strGetSP("nValueComissionAgent") : ""));
-                    break;
-                default:
-                    baseApp.showToast("Error al obtener el tipo de proveedor.");
-                    finish();
-            }
 
             setSelected();
 
@@ -348,10 +137,6 @@ public class SelectSupplierActivity extends AppCompatActivity {
 
             if(spClass.intGetSP("nSupplier") == 0){
                 baseApp.showAlert("Error", "Seleccione un proveedor");
-            }else if(!rBtnWe.isChecked() &&
-            !rBtnFarmer.isChecked() &&
-            !rBtnClient.isChecked()){
-                baseApp.showAlert("Error", "Seleccione alguna opción de quién lo pagará");
             }else if(editTxtValue.getText().toString().length() == 0){
                 baseApp.showAlert("Error", "Escriba algún valor");
             }else {
@@ -418,25 +203,7 @@ public class SelectSupplierActivity extends AppCompatActivity {
         try {
             int nSupplier = 0;
 
-            switch (cTypeSupplier) {
-                case "farmer":
-                    nSupplier = spClass.intGetSP("nFarmer");
-                    break;
-                case "carrier":
-                    nSupplier = spClass.intGetSP("nCarrier");
-                    break;
-                case "stevedore":
-                    nSupplier = spClass.intGetSP("nStevedore");
-                    break;
-                case "curter":
-                    nSupplier = spClass.intGetSP("nCurter");
-                    break;
-                case "comissionagent":
-                    nSupplier = spClass.intGetSP("nComissionAgent");
-                    break;
-                default:
-                    break;
-            }
+            nSupplier = spClass.intGetSP("nSupplier");
 
             Supplier supplier = realm.where(Supplier.class).equalTo("proveedor", nSupplier).findFirst();
 
@@ -561,7 +328,7 @@ public class SelectSupplierActivity extends AppCompatActivity {
     public void populateSpinnerClasses(){
         try {
 
-            RealmResults<Class> listResults = realm.where(Class.class)
+            RealmResults<Classs> listResults = realm.where(Classs.class)
                     .findAll();
 
             ArrayList<String> listResultsArray = new ArrayList<>();
@@ -611,7 +378,7 @@ public class SelectSupplierActivity extends AppCompatActivity {
                             try {
                                 loComando.setString(1, baseApp.charSiete(spClass.intGetSP("sucursal")));
                                 loComando.setString(2, baseApp.charSiete(spClass.intGetSP("user")));
-                                loComando.setInt(3, realm.where(Class.class).findAll().get(spinnerClass.getSelectedItemPosition()).getClase_proveedor());
+                                loComando.setInt(3, realm.where(Classs.class).findAll().get(spinnerClass.getSelectedItemPosition()).getClase_proveedor());
                                 loComando.setInt(4,  realm.where(City.class).findAll().get(spinnerCity.getSelectedItemPosition()).getCiudad());
                                 loComando.setString(5, editTxtName.getText().toString());
                                 loComando.setString(6, editTxtRFC.getText().toString());
@@ -644,37 +411,9 @@ public class SelectSupplierActivity extends AppCompatActivity {
                                                 if (Datos.getInt("exito") == 1) {
                                                     int nSupplier = Datos.getInt("proveedor");
                                                     String cName = editTxtName.getText().toString();
-                                                    
-                                                    switch (cTypeSupplier){
-                                                        case "farmer":
-                                                            spClass.intSetSP("nFarmer", nSupplier);
-                                                            spClass.strSetSP("cFarmer", cName);
-                                                            break;
-                                                        case "carrier":
-                                                            spClass.intSetSP("nCarrier", nSupplier);
-                                                            spClass.strSetSP("cCarrier", cName);
-                                                            break;
-
-                                                        case "stevedore":
-                                                            spClass.intSetSP("nStevedore", nSupplier);
-                                                            spClass.strSetSP("cStevedore", cName);
-                                                            break;
-
-                                                        case "curter":
-                                                            spClass.intSetSP("nCurter", nSupplier);
-                                                            spClass.strSetSP("cCurter", cName);
-                                                            break;
-
-                                                        case "comissionagent":
-                                                            spClass.intSetSP("nComissionAgent", nSupplier);
-                                                            spClass.strSetSP("cComissionAgent", cName);
-                                                            break;
-
-                                                        default:
-                                                            baseApp.showToast("Error al obtener el tipo de proveedor.");
-                                                    }
 
                                                     spClass.intSetSP("nSupplier", nSupplier);
+                                                    spClass.strSetSP("cSupplier", cName);
 
                                                     alert.dismiss();
                                                 }

@@ -2,7 +2,6 @@ package com.mds.ocapp.activities;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
-import android.graphics.Canvas;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -14,15 +13,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -45,7 +41,7 @@ import java.util.Locale;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
-import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
+//import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -53,12 +49,11 @@ public class MainActivity extends AppCompatActivity {
     FunctionsApp functionsapp = new FunctionsApp(this);
     SPClass spClass = new SPClass(this);
 
-    TextView txtViewInfo, txtViewFarmer, txtViewCarrier, txtViewStevedore, txtViewCurter, txtViewCommisionAgent;
-    EditText editTxtFolio, editTxtDate, editTxtValueTrip, editTxtOperator, editTxtPhone, editTxtPlates, editTxtBrand, editTxtColor, editTxtObservations;
-    RadioGroup rGroupInvoice, rGroupFreightPrice;
-    RadioButton rBtnRemission, rBtnInvoice, rBtnTon, rBtnTrip;
+    TextView txtViewInfo, txtViewSupplier;
+    EditText editTxtFolio, editTxtObservations;
     RecyclerView recyclerViewArticles;
-    ImageButton imgBtnSettings, imgBtnAddArticle, imgBtnSelectSupplier, imgBtnSelectCarrier, imgBtnSelectStevedore, imgBtnSelectCurter, imgBtnSelectCommisionAgent;
+    ImageButton imgBtnSettings, imgBtnAddArticle, imgBtnSelectSupplier;
+    RadioGroup rGroupType;
     Button btnSearch, btnAdd, btnCancel, btnSend;
     RelativeLayout layoutData;
 
@@ -68,10 +63,6 @@ public class MainActivity extends AppCompatActivity {
     Handler handler;
 
     ArrayList<Detail> listDetails = new ArrayList<>();
-
-    ItemTouchHelper itemTouchHelper;
-
-    public final Calendar myCalendar = Calendar.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,30 +79,11 @@ public class MainActivity extends AppCompatActivity {
         barLoading = new ProgressDialog(this);
 
         txtViewInfo = findViewById(R.id.txtViewInfo);
-        txtViewFarmer = findViewById(R.id.txtViewFarmer);
-        txtViewCarrier = findViewById(R.id.txtViewCarrier);
-        txtViewStevedore = findViewById(R.id.txtViewStevedore);
-        txtViewCurter = findViewById(R.id.txtViewCurter);
-        txtViewCommisionAgent = findViewById(R.id.txtViewCommisionAgent);
 
         editTxtFolio = findViewById(R.id.editTxtFolio);
-        editTxtDate = findViewById(R.id.editTxtDate);
-        editTxtValueTrip = findViewById(R.id.editTxtValueTrip);
-        editTxtOperator = findViewById(R.id.editTxtOperator);
-        editTxtPhone = findViewById(R.id.editTxtPhone);
-        editTxtPlates = findViewById(R.id.editTxtPlates);
-        editTxtBrand = findViewById(R.id.editTxtBrand);
-        editTxtColor = findViewById(R.id.editTxtColor);
         editTxtObservations = findViewById(R.id.editTxtObservations);
 
-        rGroupInvoice = findViewById(R.id.rGroupInvoice);
-        rGroupFreightPrice = findViewById(R.id.rGroupFreightPrice);
-
-        rBtnRemission = findViewById(R.id.rBtnRemission);
-        rBtnInvoice = findViewById(R.id.rBtnInvoice);
-
-        rBtnTon = findViewById(R.id.rBtnTon);
-        rBtnTrip = findViewById(R.id.rBtnTrip);
+        rGroupType = findViewById(R.id.rGroupType);
 
         btnSearch = findViewById(R.id.btnSearch);
         btnAdd = findViewById(R.id.btnAdd);
@@ -123,112 +95,25 @@ public class MainActivity extends AppCompatActivity {
         imgBtnSettings = findViewById(R.id.imgBtnSettings);
         imgBtnAddArticle = findViewById(R.id.imgBtnAddArticle);
         imgBtnSelectSupplier = findViewById(R.id.imgBtnSelectSupplier);
-        imgBtnSelectCarrier = findViewById(R.id.imgBtnSelectCarrier);
-        imgBtnSelectStevedore = findViewById(R.id.imgBtnSelectStevedore);
-        imgBtnSelectCurter = findViewById(R.id.imgBtnSelectCurter);
-        imgBtnSelectCommisionAgent = findViewById(R.id.imgBtnSelectCommisionAgent);
 
         layoutData = findViewById(R.id.layoutData);
 
         imgBtnSettings.setOnClickListener(v-> showPopup(v));
 
         imgBtnSelectSupplier.setOnClickListener(v-> functionsapp.goSelectSupplierActivity("farmer"));
-        imgBtnSelectCarrier.setOnClickListener(v-> functionsapp.goSelectSupplierActivity("carrier"));
-        imgBtnSelectStevedore.setOnClickListener(v-> functionsapp.goSelectSupplierActivity("stevedore"));
-        imgBtnSelectCurter.setOnClickListener(v-> functionsapp.goSelectSupplierActivity("curter"));
-        imgBtnSelectCommisionAgent.setOnClickListener(v-> functionsapp.goSelectSupplierActivity("comissionagent"));
 
         imgBtnAddArticle.setOnClickListener(v->functionsapp.goAddArticleActivity());
-        editTxtDate.setOnClickListener(v -> showCalendar());
 
-        rGroupInvoice.setOnCheckedChangeListener((group, checkedId) -> {
+        rGroupType.setOnCheckedChangeListener((group, checkedId) -> {
             switch(checkedId){
-                case R.id.rBtnRemission:
-                    spClass.strSetSP("cInvoiceFarmer", "remission");
+                case R.id.rBtnCaliente:
+                    spClass.strSetSP("cType", "Compra en Caliente");
                     break;
-                case R.id.rBtnInvoice:
-                    spClass.strSetSP("cInvoiceFarmer", "invoice");
-                    break;
-            }
-        });
-
-        rGroupFreightPrice.setOnCheckedChangeListener((group, checkedId) -> {
-            switch(checkedId){
-                case R.id.rBtnTon:
-                    spClass.strSetSP("cFreightPrice", "ton");
-                    break;
-                case R.id.rBtnTrip:
-                    spClass.strSetSP("cFreightPrice", "trip");
+                case R.id.rBtnOrden:
+                    spClass.strSetSP("cType", "Órden de Compra");
                     break;
             }
         });
-
-        editTxtDate.addTextChangedListener(new TextWatcher() {
-
-            public void afterTextChanged(Editable s) {}
-
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                spClass.strSetSP("cDate", s.toString());
-            }
-        });
-
-        editTxtOperator.addTextChangedListener(new TextWatcher() {
-
-            public void afterTextChanged(Editable s) {}
-
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                spClass.strSetSP("cOperator", s.toString());
-            }
-        });
-
-        editTxtPhone.addTextChangedListener(new TextWatcher() {
-
-            public void afterTextChanged(Editable s) {}
-
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                spClass.strSetSP("cPhone", s.toString());
-            }
-        });
-
-        editTxtPlates.addTextChangedListener(new TextWatcher() {
-
-            public void afterTextChanged(Editable s) {}
-
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                spClass.strSetSP("cPlates", s.toString());
-            }
-        });
-
-       editTxtBrand.addTextChangedListener(new TextWatcher() {
-
-            public void afterTextChanged(Editable s) {}
-
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                spClass.strSetSP("cBrand", s.toString());
-            }
-        });
-
-        editTxtColor.addTextChangedListener(new TextWatcher() {
-
-            public void afterTextChanged(Editable s) {}
-
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                spClass.strSetSP("cColor", s.toString());
-            }
-        });
-
 
         editTxtObservations.addTextChangedListener(new TextWatcher() {
 
@@ -240,18 +125,6 @@ public class MainActivity extends AppCompatActivity {
                 spClass.strSetSP("cObservations", s.toString());
             }
         });
-
-        editTxtValueTrip.addTextChangedListener(new TextWatcher() {
-
-            public void afterTextChanged(Editable s) {}
-
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                spClass.strSetSP("nValueTrip", s.toString());
-            }
-        });
-
 
         btnAdd.setOnClickListener(v->add());
 
@@ -295,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0,  ItemTouchHelper.LEFT) {
+    /*ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0,  ItemTouchHelper.LEFT) {
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
             return false;
@@ -338,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
-    };
+    };*/
 
     public void add(){
         deleteData();
@@ -370,10 +243,10 @@ public class MainActivity extends AppCompatActivity {
                 ConnectionClass connectionClass = new ConnectionClass(getApplicationContext());
 
                 if (connectionClass.ConnectionMDS() != null) {
-                    PreparedStatement loComando = baseApp.execute_SP("EXECUTE DiCampo.dbo.Consulta_Orden_DiCampo ?");
+                    PreparedStatement loComando = baseApp.execute_SP("EXECUTE ERP_CIE.dbo.Consulta_Orden_Compra_Android ?");
 
                     if (loComando == null) {
-                        baseApp.showSnackBar("Error al Crear SP Consulta_Orden_DiCampo");
+                        baseApp.showSnackBar("Error al Crear SP Consulta_Orden_Compra_Android");
                     } else {
                         try {
 
@@ -392,112 +265,15 @@ public class MainActivity extends AppCompatActivity {
 
                                             if (Datos.getInt("orden_compra") != 0) {
 
-                                                spClass.intSetSP("nFarmer", Datos.getInt("proveedor"));
+                                                spClass.intSetSP("nSupplier", Datos.getInt("proveedor"));
 
-                                                if (spClass.intGetSP("nFarmer") != 0) {
-                                                    spClass.strSetSP("cFarmer", realm.where(Supplier.class).equalTo("proveedor", spClass.intGetSP("nFarmer")).findFirst().getNombre_proveedor().trim());
+                                                if (spClass.intGetSP("nSupplier") != 0) {
+                                                    spClass.strSetSP("cSupplier", realm.where(Supplier.class).equalTo("proveedor", spClass.intGetSP("nSupplier")).findFirst().getNombre_proveedor().trim());
                                                 } else {
-                                                    spClass.strSetSP("cFarmer", "Seleccione un agricultor...");
+                                                    spClass.strSetSP("cSupplier", "Seleccione un proveedor...");
                                                 }
-
-                                                spClass.strSetSP("cDate", Datos.getString("cFecha_Recepcion"));
-
-                                                spClass.strSetSP("cInvoiceFarmer", (Datos.getString("tipo_factura").trim().equals("Remisión") ? "remission" : "invoice"));
-
-                                                spClass.intSetSP("nCarrier", Datos.getInt("transportista"));
-                                                if (spClass.intGetSP("nCarrier") != 0) {
-                                                    spClass.strSetSP("cCarrier", realm.where(Supplier.class).equalTo("proveedor", spClass.intGetSP("nCarrier")).findFirst().getNombre_proveedor().trim());
-                                                } else {
-                                                    spClass.strSetSP("cCarrier", "Seleccione un transportista...");
-                                                }
-
-                                                spClass.intSetSP("nStevedore", Datos.getInt("estibador"));
-                                                if (spClass.intGetSP("nStevedore") != 0) {
-                                                    spClass.strSetSP("cStevedore", realm.where(Supplier.class).equalTo("proveedor", spClass.intGetSP("nCarrier")).findFirst().getNombre_proveedor().trim());
-                                                } else {
-                                                    spClass.strSetSP("cStevedore", "Seleccione un estibador...");
-                                                }
-
-                                                spClass.intSetSP("nCurter", Datos.getInt("cortador"));
-                                                if (spClass.intGetSP("nCurter") != 0) {
-                                                    spClass.strSetSP("cCurter", realm.where(Supplier.class).equalTo("proveedor", spClass.intGetSP("nCurter")).findFirst().getNombre_proveedor().trim());
-                                                } else {
-                                                    spClass.strSetSP("cCurter", "Seleccione un cortador...");
-                                                }
-
-                                                spClass.intSetSP("nComissionAgent", Datos.getInt("comisionista"));
-                                                if (spClass.intGetSP("nComissionAgent") != 0) {
-                                                    spClass.strSetSP("cComissionAgent", realm.where(Supplier.class).equalTo("proveedor", spClass.intGetSP("nComissionAgent")).findFirst().getNombre_proveedor().trim());
-                                                } else {
-                                                    spClass.strSetSP("cComissionAgent", "Seleccione un comisionista...");
-                                                }
-
-                                                switch (Datos.getString("paga_transportista")) {
-                                                    case "Nosotros":
-                                                        spClass.strSetSP("cTypeCarrier", "we");
-                                                        break;
-                                                    case "Agricultor":
-                                                        spClass.strSetSP("cTypeCarrier", "farmer");
-                                                        break;
-                                                    case "Cliente":
-                                                        spClass.strSetSP("cTypeCarrier", "client");
-                                                        break;
-                                                }
-
-                                                switch (Datos.getString("paga_estibador")) {
-                                                    case "Nosotros":
-                                                        spClass.strSetSP("cTypeStevedore", "we");
-                                                        break;
-                                                    case "Agricultor":
-                                                        spClass.strSetSP("cTypeStevedore", "farmer");
-                                                        break;
-                                                    case "Cliente":
-                                                        spClass.strSetSP("cTypeStevedore", "client");
-                                                        break;
-                                                }
-
-                                                switch (Datos.getString("paga_cortador")) {
-                                                    case "Nosotros":
-                                                        spClass.strSetSP("cTypeCurter", "we");
-                                                        break;
-                                                    case "Agricultor":
-                                                        spClass.strSetSP("cTypeCurter", "farmer");
-                                                        break;
-                                                    case "Cliente":
-                                                        spClass.strSetSP("cTypeCurter", "client");
-                                                        break;
-                                                }
-
-                                                switch (Datos.getString("paga_comisionista")) {
-                                                    case "Nosotros":
-                                                        spClass.strSetSP("cTypeComissionAgent", "we");
-                                                        break;
-                                                    case "Agricultor":
-                                                        spClass.strSetSP("cTypeComissionAgent", "farmer");
-                                                        break;
-                                                    case "Cliente":
-                                                        spClass.strSetSP("cTypeComissionAgent", "client");
-                                                        break;
-                                                }
-
-                                                spClass.strSetSP("cOperator", Datos.getString("nombre_chofer"));
-                                                spClass.strSetSP("cPhone", Datos.getString("celular_chofer"));
-                                                spClass.strSetSP("cPlates", Datos.getString("placas_transporte"));
-                                                spClass.strSetSP("cBrand", Datos.getString("marca_transporte"));
-                                                spClass.strSetSP("cColor", Datos.getString("color_transporte"));
 
                                                 spClass.strSetSP("cObservations", Datos.getString("comentarios"));
-
-                                                spClass.strSetSP("cFreightPrice", (Datos.getString("tipo_precio_flete").trim().equals("Por Tonelada") ? "ton" : "trip"));
-
-                                                spClass.strSetSP("nValueTrip", Datos.getString("precio_flete"));
-
-                                                spClass.intSetSP("nUbication", Datos.getInt("ubicacion"));
-                                                spClass.intSetSP("nClient", Datos.getInt("cliente"));
-                                                spClass.strSetSP("cDestiny", Datos.getString("destino"));
-                                                spClass.strSetSP("cMarginType", Datos.getString("tipo_margen"));
-                                                spClass.intSetSP("nMarginPercentage", Datos.getInt("porcentaje_margen"));
-                                                spClass.intSetSP("nImportMargin", Datos.getInt("importe_margen"));
 
                                                 exists = true;
                                             }
@@ -514,14 +290,9 @@ public class MainActivity extends AppCompatActivity {
                                                     Datos1.getInt("clave_articulo"),
                                                     Datos1.getString("articulo").trim(),
                                                     Datos1.getString("nombre_articulo").trim(),
-                                                    Datos1.getDouble("cantidad_pactada"),
-                                                    Datos1.getDouble("precio_pactado"),
-                                                    Datos1.getDouble("cantidad") * Datos1.getDouble("precio_pactado"),
                                                     Datos1.getDouble("cantidad"),
-                                                    Datos1.getDouble("cantidad_cliente"),
-                                                    Datos1.getDouble("precio_cliente"),
-                                                    Datos1.getDouble("importe_margen"),
-                                                    Datos1.getDouble("porcentaje_margen")
+                                                    Datos1.getDouble("precio"),
+                                                    Datos1.getDouble("cantidad") * Datos1.getDouble("precio")
                                             );
 
                                             realm.copyToRealm(detail);
@@ -575,81 +346,9 @@ public class MainActivity extends AppCompatActivity {
     public void setData(){
         try{
 
-            String cDate = "", cObservations = "", cOperator, cPhone, cPlates, cBrand, cColor, nValueTrip = "";
+            String cObservations = "";
 
-            txtViewFarmer.setText(spClass.strGetSP("cFarmer"));
-            txtViewCarrier.setText(spClass.strGetSP("cCarrier"));
-            txtViewStevedore.setText(spClass.strGetSP("cStevedore"));
-            txtViewCurter.setText(spClass.strGetSP("cCurter"));
-            txtViewCommisionAgent.setText(spClass.strGetSP("cComissionAgent"));
-
-            cDate = spClass.strGetSP("cDate");
-            cOperator = spClass.strGetSP("cOperator");
-            cPhone = spClass.strGetSP("cPhone");
-            cPlates = spClass.strGetSP("cPlates");
-            cBrand = spClass.strGetSP("cBrand");
-            cColor = spClass.strGetSP("cColor");
             cObservations = spClass.strGetSP("cObservations");
-            nValueTrip = spClass.strGetSP("nValueTrip");
-
-            switch(spClass.strGetSP("cInvoiceFarmer")){
-                case "remission":
-                    rBtnRemission.setChecked(true);
-                    break;
-                case "invoice":
-                    rBtnInvoice.setChecked(true);
-                    break;
-            }
-
-            switch(spClass.strGetSP("cFreightPrice")){
-                case "ton":
-                    rBtnTon.setChecked(true);
-                    break;
-                case "trip":
-                    rBtnTrip.setChecked(true);
-                    break;
-
-                default:
-                    rBtnTon.setChecked(false);
-                    rBtnTrip.setChecked(false);
-                    break;
-            }
-
-            if(!cDate.equals("ND")){
-                editTxtDate.setText(cDate);
-            }else{
-                editTxtDate.setText("");
-            }
-
-            if(!cOperator.equals("ND")){
-                editTxtOperator.setText(cOperator);
-            }else{
-                editTxtOperator.setText("");
-            }
-
-            if(!cPhone.equals("ND")){
-                editTxtPhone.setText(cPhone);
-            }else{
-                editTxtPhone.setText("");
-            }
-
-            if(!cPlates.equals("ND")){
-                editTxtPlates.setText(cPlates);
-            }else{
-                editTxtPlates.setText("");
-            }
-
-            if(!cBrand.equals("ND")){
-                editTxtBrand.setText(cBrand);
-            }else{
-                editTxtBrand.setText("");
-            }
-
-            if(!cColor.equals("ND")){
-                editTxtColor.setText(cColor);
-            }else{
-                editTxtColor.setText("");
-            }
 
             if(!cObservations.equals("ND")){
                 editTxtObservations.setText(cObservations);
@@ -657,11 +356,6 @@ public class MainActivity extends AppCompatActivity {
                 editTxtObservations.setText("");
             }
 
-            if(!nValueTrip.equals("ND") && !nValueTrip.isEmpty()){
-                editTxtValueTrip.setText(Double.toString(baseApp.round(Double.parseDouble(nValueTrip))));
-            }else{
-                editTxtValueTrip.setText("");
-            }
         }catch (Exception ex){
             baseApp.showToast("Ocurrió un error interno.");
             ex.printStackTrace();
@@ -686,9 +380,6 @@ public class MainActivity extends AppCompatActivity {
                 recyclerViewArticles.setLayoutManager(mGridLayoutManagerDetails);
                 recyclerViewArticles.setAdapter(adapterDetails);
                 recyclerViewArticles.setVisibility(View.VISIBLE);
-
-                itemTouchHelper = new ItemTouchHelper(simpleCallback);
-                itemTouchHelper.attachToRecyclerView(recyclerViewArticles);
             }
         }catch (Exception ex){
             baseApp.showToast("Ocurrió un error interno.");
@@ -701,63 +392,16 @@ public class MainActivity extends AppCompatActivity {
 
             spClass.deleteSP("nOrder");
 
-            spClass.deleteSP("nFarmer");
-            spClass.strSetSP("cFarmer", "Seleccione un agricultor...");
-
-            spClass.deleteSP("nCarrier");
-            spClass.strSetSP("cCarrier", "Seleccione un transportista...");
-
-            spClass.deleteSP("nStevedore");
-            spClass.strSetSP("cStevedore", "Seleccione un estibador...");
-
-            spClass.deleteSP("nCurter");
-            spClass.strSetSP("cCurter", "Seleccione un cortador...");
-
-            spClass.deleteSP("nComissionAgent");
-            spClass.strSetSP("cComissionAgent", "Seleccione un comisionista...");
-
             spClass.deleteSP("nSupplier");
-
-            spClass.deleteSP("cTypeCarrier");
-            spClass.deleteSP("cTypeStevedore");
-            spClass.deleteSP("cTypeCurter");
-            spClass.deleteSP("cTypeComissionAgent");
-
-            spClass.deleteSP("nValueCarrier");
-            spClass.deleteSP("nValueStevedore");
-            spClass.deleteSP("nValueCurter");
-            spClass.deleteSP("nValueComissionAgent");
-
-            spClass.deleteSP("cDate");
-            spClass.deleteSP("cInvoiceFarmer");
-
-            spClass.deleteSP("cOperator");
-            spClass.deleteSP("cPhone");
-            spClass.deleteSP("cPlates");
-            spClass.deleteSP("cBrand");
-            spClass.deleteSP("cColor");
+            spClass.strSetSP("cSupplier", "Seleccione un proveedor...");
 
             spClass.deleteSP("cObservations");
 
-            spClass.deleteSP("cFreightPrice");
-            spClass.deleteSP("nValueTrip");
-
             spClass.deleteSP("nArticle");
-
-            // Solo consultados
-            spClass.deleteSP("nUbication");
-            spClass.deleteSP("nClient");
-            spClass.deleteSP("cDestiny");
-            spClass.deleteSP("cMarginType");
-            spClass.deleteSP("nMarginPercentage");
-            spClass.deleteSP("nImportMargin");
 
             realm.beginTransaction();
             realm.delete(Detail.class);
             realm.commitTransaction();
-
-            rGroupInvoice.clearCheck();
-            rGroupFreightPrice.clearCheck();
 
             //baseApp.showToast("Se ha eliminado todo con éxito");
 
@@ -798,27 +442,10 @@ public class MainActivity extends AppCompatActivity {
         try{
             String error = "";
 
-            if(spClass.intGetSP("nFarmer") == 0){
-                error = "Selecciona un agricultor";
-            }else if(editTxtDate.getText().toString().length() == 0){
-                error = "Selecciona una fecha de recepción";
-            }else if(spClass.strGetSP("cInvoiceFarmer").equals("ND")){
-                error = "Seleccione el Tipo de Factura de Agricultor";
+            if(spClass.intGetSP("nSupplier") == 0){
+                error = "Selecciona un proveedor";
             }else if(realm.where(Detail.class).findAll().size() == 0){
                 error = "Agrega mínimo un detalle";
-            /*}else if(spClass.intGetSP("nCarrier") == 0){
-                error = "Selecciona un transportista";
-            }else if(spClass.intGetSP("nStevedore") == 0){
-                error = "Selecciona un estibador";
-            }else if(spClass.intGetSP("nCurter") == 0){
-                error = "Selecciona una cortador";
-            }else if(spClass.intGetSP("nComissionAgent") == 0){
-                error = "Selecciona una comisionista";
-            */}else if(spClass.strGetSP("cFreightPrice").equals("ND")){
-                error = "Selecciona un Tipo de Precio de Flete";
-            }else if(spClass.strGetSP("cFreightPrice").equals("trip") &&
-                    editTxtValueTrip.getText().toString().length() == 0){
-                error = "Seleccionaste Precio del Flete por Viaje y no has ingresado el Valor del Viaje";
             }else{
                 backgroundProcess("save", "bar");
             }
@@ -844,47 +471,20 @@ public class MainActivity extends AppCompatActivity {
                 ConnectionClass connectionClass = new ConnectionClass(getApplicationContext());
 
                 if (connectionClass.ConnectionMDS() != null) {
-                    PreparedStatement loComando = baseApp.execute_SP("EXECUTE DiCampo.dbo.GUARDA_ORDEN_COMPRA ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, " +
-                            "?, ?, ?, ?, ?, ?, ?, ?, ?");
+                    PreparedStatement loComando = baseApp.execute_SP("EXECUTE ERP_CIE.dbo.Guarda_Orden_Compra_Android ?, ?, ?, ?, ?, ?, ?");
 
                     if (loComando == null) {
-                        baseApp.showSnackBar("Error al Crear SP GUARDA_ORDEN_COMPRA");
+                        baseApp.showSnackBar("Error al Crear SP Guarda_Orden_Compra_Android");
                     } else {
                         try {
 
-                            loComando.setString(1, baseApp.charSiete(spClass.intGetSP("sucursal")));
+                            loComando.setInt(1, spClass.intGetSP("sucursal"));
                             loComando.setInt(2, spClass.intGetSP("user"));
-                            loComando.setInt(3, spClass.intGetSP("nFarmer"));
-                            loComando.setInt(4, spClass.intGetSP("nUbication"));
-                            loComando.setInt(5, spClass.intGetSP("nCarrier"));
-                            loComando.setInt(6, spClass.intGetSP("nStevedore"));
-                            loComando.setInt(7, spClass.intGetSP("nCurter"));
-                            loComando.setInt(8, spClass.intGetSP("nComissionAgent"));
-                            loComando.setInt(9, spClass.intGetSP("nClient"));
-                            loComando.setString(10, (spClass.strGetSP("cInvoiceFarmer").equals("remission") ? "Remisión" : "Factura"));
-                            loComando.setString(11, getSpanishValue(spClass.strGetSP("cTypeCarrier")));
-                            loComando.setString(12, getSpanishValue(spClass.strGetSP("cTypeStevedore")));
-                            loComando.setString(13, getSpanishValue(spClass.strGetSP("cTypeCurter")));
-                            loComando.setString(14, getSpanishValue(spClass.strGetSP("cTypeComissionAgent")));
-                            loComando.setString(15, spClass.strGetSP("cDestiny"));
-                            loComando.setString(16, (spClass.strGetSP("cFreightPrice").equals("ton") ? "Por Tonelada" : "Por Viaje"));
-                            loComando.setString(17, spClass.strGetSP("cMarginType"));
-                            loComando.setBoolean(18, false);
-                            loComando.setDouble(19, Double.parseDouble((spClass.strGetSP("nValueCarrier").equals("ND") ? "0" : spClass.strGetSP("nValueCarrier"))));
-                            loComando.setDouble(20, Double.parseDouble((spClass.strGetSP("nValueStevedore").equals("ND") ? "0" : spClass.strGetSP("nValueStevedore"))));
-                            loComando.setDouble(21, Double.parseDouble((spClass.strGetSP("nValueCurter").equals("ND") ? "0" : spClass.strGetSP("nValueCurter"))));
-                            loComando.setDouble(22, Double.parseDouble((spClass.strGetSP("nValueComissionAgent").equals("ND") ? "0" : spClass.strGetSP("nValueComissionAgent"))));
-                            loComando.setDouble(23, Double.parseDouble((spClass.strGetSP("nValueTrip").equals("ND") ? "0" : spClass.strGetSP("nValueTrip"))));
-                            loComando.setInt(24, spClass.intGetSP("nMarginPercentage"));
-                            loComando.setInt(25,  spClass.intGetSP("nImportMargin"));
-                            loComando.setString(26, editTxtOperator.getText().toString());
-                            loComando.setString(27, editTxtPhone.getText().toString());
-                            loComando.setString(28, editTxtPlates.getText().toString());
-                            loComando.setString(29, editTxtBrand.getText().toString());
-                            loComando.setString(30, editTxtColor.getText().toString());
-                            loComando.setString(31, generateSplitDetails()); //details
-                            loComando.setString(32, editTxtObservations.getText().toString());
-                            loComando.setInt(33, spClass.intGetSP("nOrder"));
+                            loComando.setInt(3, spClass.intGetSP("nSupplier"));
+                            loComando.setInt(4, spClass.intGetSP("cType"));
+                            loComando.setString(5, editTxtObservations.getText().toString());
+                            loComando.setString(6, generateSplitDetails()); //details
+                            loComando.setInt(7, spClass.intGetSP("nOrder"));
 
                             isResultSet = loComando.execute();
 
@@ -932,29 +532,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public String getSpanishValue(String value){
-        String returnValue = "";
-
-        switch (value){
-            case "we":
-                returnValue = "Nosotros";
-                break;
-            case "farmer":
-                returnValue = "Agricultor";
-                break;
-            case "client":
-                returnValue = "Cliente";
-                break;
-            default:
-                returnValue = "";
-                break;
-        }
-
-        return returnValue;
-    }
-
-
-    public String generateSplitDetails(){
+   public String generateSplitDetails(){
         String stringSplit = "";
 
         try (Realm realm = Realm.getDefaultInstance()) {
@@ -964,43 +542,11 @@ public class MainActivity extends AppCompatActivity {
             for (Detail detail : details) {
                 stringSplit += detail.getArticulo() + "|";
                 stringSplit += detail.getCantidad() + "|";
-                stringSplit += detail.getCantidad_real() + "|";
-                stringSplit += detail.getPrecio() + "|";
-                stringSplit += detail.getCantidad_cliente() + "|";
-                stringSplit += detail.getPrecio_cliente() + "|";
-                stringSplit += detail.getImporte_margen() + "|";
-                stringSplit += detail.getPorcentaje_margen() + "Ç";
+                stringSplit += detail.getPrecio() + "Ç";
             }
         }
 
         return stringSplit;
-    }
-
-    public void updateLabelDate(){
-        BaseApp baseApp = new BaseApp(this);
-
-        try {
-            String myFormat = "dd/MM/yyyy"; //In which you need put here
-            SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-
-            editTxtDate.setText(sdf.format(myCalendar.getTime()));
-        }catch (Exception ex){
-            baseApp.showAlert("Error", "Reporta este error: " + ex);
-        }
-    }
-
-    public void showCalendar(){
-        DatePickerDialog.OnDateSetListener date = (view, year, monthOfYear, dayOfMonth) -> {
-            // TODO Auto-generated method stub
-            myCalendar.set(Calendar.YEAR, year);
-            myCalendar.set(Calendar.MONTH, monthOfYear);
-            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            updateLabelDate();
-        };
-
-        new DatePickerDialog(MainActivity.this, date, myCalendar
-                .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                myCalendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
 

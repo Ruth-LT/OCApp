@@ -97,7 +97,6 @@ public class AdapterSuppliers extends RecyclerView.Adapter<AdapterSuppliers.List
             holder.cardViewItem.setCardBackgroundColor(ResourcesCompat.getColor(context.getResources(), R.color.colorPrimary, null));
         }else{
             holder.cardViewItem.setCardBackgroundColor(ResourcesCompat.getColor(context.getResources(), android.R.color.white, null));
-
         }
     }
 

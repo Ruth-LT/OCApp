@@ -4,9 +4,17 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Desarrollo_Android/OCApp/app/src/main/res/drawable/bg_wave.xml" value="0.1435" />
+        <entry key="..\:/Desarrollo_Android/OCApp/app/src/main/res/drawable/launch_screen.xml" value="0.1435" />
         <entry key="..\:/Desarrollo_Android/OCApp/app/src/main/res/layout/activity_about.xml" value="0.1" />
         <entry key="..\:/Desarrollo_Android/OCApp/app/src/main/res/layout/activity_account.xml" value="0.1" />
-        <entry key="..\:/Desarrollo_Android/OCApp/app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="..\:/Desarrollo_Android/OCApp/app/src/main/res/layout/activity_add_article.xml" value="0.15925925925925927" />
+        <entry key="..\:/Desarrollo_Android/OCApp/app/src/main/res/layout/activity_change_connection.xml" value="0.15925925925925927" />
+        <entry key="..\:/Desarrollo_Android/OCApp/app/src/main/res/layout/activity_login.xml" value="0.15925925925925927" />
+        <entry key="..\:/Desarrollo_Android/OCApp/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/Desarrollo_Android/OCApp/app/src/main/res/layout/activity_restore_dbbackup.xml" value="0.15925925925925927" />
+        <entry key="..\:/Desarrollo_Android/OCApp/app/src/main/res/layout/activity_search_order.xml" value="0.2" />
+        <entry key="..\:/Desarrollo_Android/OCApp/app/src/main/res/layout/activity_select_supplier.xml" value="0.21" />
+        <entry key="..\:/Desarrollo_Android/OCApp/app/src/main/res/layout/dialog_add_supplier.xml" value="0.14814814814814814" />
         <entry key="..\:/Desarrollo_Android/OCApp/app/src/main/res/menu/menu_change_connection.xml" value="0.1" />
         <entry key="..\:/Desarrollo_Android/OCApp/app/src/main/res/menu/menu_login.xml" value="0.1" />
         <entry key="..\:/Desarrollo_Android/OCApp/app/src/main/res/menu/menu_main.xml" value="0.1" />

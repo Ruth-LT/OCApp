@@ -86,7 +86,7 @@ public class AdapterOrders extends RecyclerView.Adapter<AdapterOrders.OrderViewH
             txtViewOrder        = itemView.findViewById(R.id.txtViewOrder);
             txtViewDate        = itemView.findViewById(R.id.txtViewDate);
             txtViewBranchOffice   = itemView.findViewById(R.id.txtViewBranchOffice);
-            txtViewFarmer = itemView.findViewById(R.id.txtViewFarmer);
+            txtViewFarmer = itemView.findViewById(R.id.txtViewProveedor);
             txtViewStatus    = itemView.findViewById(R.id.txtViewStatus);
         }
     }

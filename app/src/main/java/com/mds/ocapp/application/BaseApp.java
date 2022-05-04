@@ -339,7 +339,7 @@ public class BaseApp extends Application {
                     sweetAlertError.setCancelable(false);
                 }
                 sweetAlertError.show();
-                Button btnAlertDialogError = sweetAlertError.findViewById(R.id.confirm_button);
+                Button btnAlertDialogError = sweetAlertError.findViewById(cn.pedant.SweetAlert.R.id.confirm_button);
                 btnAlertDialogError.setBackgroundColor(ContextCompat.getColor(context, android.R.color.white));
                 btnAlertDialogError.setTextColor(ContextCompat.getColor(context, android.R.color.black));
                 break;
@@ -355,7 +355,7 @@ public class BaseApp extends Application {
                 }
                 sweetAlertWarning.show();
 
-                Button btnAlertDialogWarning = sweetAlertWarning.findViewById(R.id.confirm_button);
+                Button btnAlertDialogWarning = sweetAlertWarning.findViewById(cn.pedant.SweetAlert.R.id.confirm_button);
                 btnAlertDialogWarning.setBackgroundColor(ContextCompat.getColor(context, android.R.color.white));
                 btnAlertDialogWarning.setTextColor(ContextCompat.getColor(context, android.R.color.black));
                 break;
@@ -371,7 +371,7 @@ public class BaseApp extends Application {
                 }
                 sweetAlertSuccess.show();
 
-                Button btnAlertDialogSuccess = sweetAlertSuccess.findViewById(R.id.confirm_button);
+                Button btnAlertDialogSuccess = sweetAlertSuccess.findViewById(cn.pedant.SweetAlert.R.id.confirm_button);
                 btnAlertDialogSuccess.setBackgroundColor(ContextCompat.getColor(context, android.R.color.white));
                 btnAlertDialogSuccess.setTextColor(ContextCompat.getColor(context, android.R.color.black));
                 break;
@@ -387,7 +387,7 @@ public class BaseApp extends Application {
                 }
                 sweetAlertDefault.show();
 
-                Button btnAlertDialogDefault = sweetAlertDefault.findViewById(R.id.confirm_button);
+                Button btnAlertDialogDefault = sweetAlertDefault.findViewById(cn.pedant.SweetAlert.R.id.confirm_button);
                 btnAlertDialogDefault.setBackgroundColor(ContextCompat.getColor(context, android.R.color.white));
                 btnAlertDialogDefault.setTextColor(ContextCompat.getColor(context, android.R.color.black));
                 break;

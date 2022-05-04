@@ -20,6 +20,7 @@ import com.mds.ocapp.activities.SelectSupplierActivity;
 import com.mds.ocapp.models.Article;
 import com.mds.ocapp.models.BranchOffice;
 import com.mds.ocapp.models.City;
+import com.mds.ocapp.models.Classs;
 import com.mds.ocapp.models.Supplier;
 
 import java.sql.PreparedStatement;
@@ -112,7 +113,7 @@ public class FunctionsApp extends Application {
     public void downloadData(){
         Supplier supplier;
         Article article;
-        Class classItem;
+        Classs classItem;
         City city;
         BranchOffice branchOffice;
 
@@ -140,7 +141,7 @@ public class FunctionsApp extends Application {
                             realm.beginTransaction();
                             realm.delete(Supplier.class);
                             realm.delete(Article.class);
-                            realm.delete(Class.class);
+                            realm.delete(Classs.class);
                             realm.delete(BranchOffice.class);
                             realm.commitTransaction();
 
@@ -184,7 +185,7 @@ public class FunctionsApp extends Application {
                                         ResultSet Datos2 = loComando.getResultSet();
                                         while (Datos2.next()) {
                                             realm.beginTransaction();
-                                            classItem = new Class(
+                                            classItem = new Classs(
                                                     Datos2.getInt("clase_proveedor"),
                                                     Datos2.getString("nombre_clase").trim()
                                             );

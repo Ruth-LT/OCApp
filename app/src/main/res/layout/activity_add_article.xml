@@ -30,7 +30,7 @@
                     android:layout_height="80dp"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="false"
-                    android:src="@drawable/icobig_vegetables" />
+                    android:src="@drawable/icobig_detail" />
 
                 <TextView
                     android:id="@+id/txtViewType"
