@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
         imgBtnSettings.setOnClickListener(v-> showPopup(v));
 
-        imgBtnSelectSupplier.setOnClickListener(v-> functionsapp.goSelectSupplierActivity("farmer"));
+        imgBtnSelectSupplier.setOnClickListener(v-> functionsapp.goSelectSupplierActivity("supplier"));
 
         imgBtnAddArticle.setOnClickListener(v->functionsapp.goAddArticleActivity());
 

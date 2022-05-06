@@ -55,42 +55,14 @@ public class AdapterSuppliers extends RecyclerView.Adapter<AdapterSuppliers.List
 
         holder.imgBtnSelect.setOnClickListener(v -> {
 
-            switch (cTypeSupplier){
-                case "farmer":
-                    spClass.intSetSP("nFarmer", listSuppliers.get(position).getProveedor());
-                    spClass.strSetSP("cFarmer", listSuppliers.get(position).getNombre_proveedor());
-                    break;
-                case "carrier":
-                    spClass.intSetSP("nCarrier", listSuppliers.get(position).getProveedor());
-                    spClass.strSetSP("cCarrier", listSuppliers.get(position).getNombre_proveedor());
-                    break;
-
-                case "stevedore":
-                    spClass.intSetSP("nStevedore", listSuppliers.get(position).getProveedor());
-                    spClass.strSetSP("cStevedore", listSuppliers.get(position).getNombre_proveedor());
-                    break;
-
-                case "curter":
-                    spClass.intSetSP("nCurter", listSuppliers.get(position).getProveedor());
-                    spClass.strSetSP("cCurter", listSuppliers.get(position).getNombre_proveedor());
-                    break;
-
-                case "comissionagent":
-                    spClass.intSetSP("nComissionAgent", listSuppliers.get(position).getProveedor());
-                    spClass.strSetSP("cComissionAgent", listSuppliers.get(position).getNombre_proveedor());
-                    break;
-
-                default:
-                    baseApp.showToast("Error al obtener el tipo de proveedor.");
-            }
-
             spClass.intSetSP("nSupplier", listSuppliers.get(position).getProveedor());
+            spClass.strSetSP("cSupplier", listSuppliers.get(position).getNombre_proveedor());
 
-            if(cTypeSupplier.equals("farmer")){
+           // if(cTypeSupplier.equals("farmer")){
                 ((Activity) (context)).finish();
-            }else{
-                ((SelectSupplierActivity) (context)).removeAllExceptThis(position);
-            }
+            //}else{
+                //((SelectSupplierActivity) (context)).removeAllExceptThis(position);
+            //}
         });
 
         if(spClass.intGetSP("nSupplier") == listSuppliers.get(position).getProveedor()){

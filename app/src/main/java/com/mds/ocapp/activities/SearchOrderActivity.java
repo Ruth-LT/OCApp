@@ -47,7 +47,7 @@ public class SearchOrderActivity extends AppCompatActivity {
 
     Spinner spinnerBranchOffices;
     EditText editTxtDateStart, editTxtDateFinish;
-    TextView txtViewFarmer;
+    TextView txtViewSupplier;
     ImageButton imgBtnSelectSupplier;
     RecyclerView recyclerViewOrders;
     CheckBox checkBoxAll;
@@ -76,7 +76,7 @@ public class SearchOrderActivity extends AppCompatActivity {
         editTxtDateStart = findViewById(R.id.editTxtDateStart);
         editTxtDateFinish = findViewById(R.id.editTxtDateFinish);
         recyclerViewOrders = findViewById(R.id.recyclerViewOrders);
-        txtViewFarmer = findViewById(R.id.txtViewProveedor);
+        txtViewSupplier = findViewById(R.id.txtViewProveedor);
         imgBtnSelectSupplier = findViewById(R.id.imgBtnSelectSupplier);
         checkBoxAll = findViewById(R.id.checkBoxAll);
         btnSearch = findViewById(R.id.btnSearch);
@@ -84,7 +84,7 @@ public class SearchOrderActivity extends AppCompatActivity {
         editTxtDateStart.setOnClickListener(v -> showCalendar());
         editTxtDateFinish.setOnClickListener(v -> showCalendar2());
 
-        imgBtnSelectSupplier.setOnClickListener(v-> functionsapp.goSelectSupplierActivity("farmer"));
+        imgBtnSelectSupplier.setOnClickListener(v-> functionsapp.goSelectSupplierActivity("supplier"));
 
         populateSpinnesBranchOffices();
 
@@ -340,7 +340,7 @@ public class SearchOrderActivity extends AppCompatActivity {
     }
 
     public void setData(){
-        txtViewFarmer.setText(spClass.strGetSP("cFarmer"));
+        txtViewSupplier.setText(spClass.strGetSP("cSupplier"));
     }
 
     public void onResume(){
