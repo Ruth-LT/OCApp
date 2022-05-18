@@ -1708,5 +1708,19 @@ public class BaseApp extends Application {
         java.sql.Date sDate = new java.sql.Date(uDate.getTime());
         return sDate;
     }
+
+
+    // funcion para convertir un string a date sin tiempo (solo fecha)
+    public Date convertDateWOTime2(String dateString) {
+        Date date = null;
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+
+        try {
+            date = formatter.parse(dateString);
+        } catch (ParseException e) {
+            //e.printStackTrace();
+        }
+        return date;
+    }
 }
 

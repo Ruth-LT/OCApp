@@ -49,8 +49,6 @@ public class AdapterSuppliers extends RecyclerView.Adapter<AdapterSuppliers.List
         final FunctionsApp functionsapp = new FunctionsApp(context);
         final SPClass spClass = new SPClass(context);
 
-        String cTypeSupplier = spClass.strGetSP("cTypeSupplier");
-
         holder.txtViewText.setText(listSuppliers.get(position).getNombre_proveedor().trim());
 
         holder.imgBtnSelect.setOnClickListener(v -> {

@@ -251,7 +251,7 @@ public class SearchOrderActivity extends AppCompatActivity {
             RealmResults<Order> listOrders = realm.where(Order.class).findAll();
             
             if(listOrders.size() == 0){
-                baseApp.showToast("No se encontraron proveedores con tu búsqueda.");
+                baseApp.showToast("No se encontraron resultados con tu búsqueda.");
                 recyclerViewOrders.setVisibility(View.GONE);
             }else{
                 AdapterOrders adapterOrders = new AdapterOrders(this, listOrders);

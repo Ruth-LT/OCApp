@@ -2,6 +2,7 @@ package com.mds.ocapp.activities;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -17,8 +18,10 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,7 +44,6 @@ import java.util.Locale;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
-//import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -50,11 +52,11 @@ public class MainActivity extends AppCompatActivity {
     SPClass spClass = new SPClass(this);
 
     TextView txtViewInfo, txtViewSupplier;
-    EditText editTxtFolio, editTxtObservations;
+    EditText editTxtFolio, editTxtDate, editTxtObservations;
     RecyclerView recyclerViewArticles;
     ImageButton imgBtnSettings, imgBtnAddArticle, imgBtnSelectSupplier;
     RadioGroup rGroupType;
-    Button btnSearch, btnAdd, btnCancel, btnSend;
+    Button btnSearch, btnAdd, btnCancel, btnSend, btnConvertOrder;
     RelativeLayout layoutData;
 
     Realm realm;
@@ -63,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
     Handler handler;
 
     ArrayList<Detail> listDetails = new ArrayList<>();
+
+    public final Calendar myCalendar = Calendar.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,8 +83,10 @@ public class MainActivity extends AppCompatActivity {
         barLoading = new ProgressDialog(this);
 
         txtViewInfo = findViewById(R.id.txtViewInfo);
+        txtViewSupplier = findViewById(R.id.txtViewSupplier);
 
         editTxtFolio = findViewById(R.id.editTxtFolio);
+        editTxtDate = findViewById(R.id.editTxtDate);
         editTxtObservations = findViewById(R.id.editTxtObservations);
 
         rGroupType = findViewById(R.id.rGroupType);
@@ -89,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
         btnAdd = findViewById(R.id.btnAdd);
         btnCancel = findViewById(R.id.btnCancel);
         btnSend = findViewById(R.id.btnSend);
+        btnConvertOrder = findViewById(R.id.btnConvertOrder);
 
         recyclerViewArticles = findViewById(R.id.recyclerViewArticles);
 
@@ -104,6 +111,8 @@ public class MainActivity extends AppCompatActivity {
 
         imgBtnAddArticle.setOnClickListener(v->functionsapp.goAddArticleActivity());
 
+        editTxtDate.setOnClickListener(v -> showCalendar());
+
         rGroupType.setOnCheckedChangeListener((group, checkedId) -> {
             switch(checkedId){
                 case R.id.rBtnCaliente:
@@ -112,6 +121,17 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.rBtnOrden:
                     spClass.strSetSP("cType", "Órden de Compra");
                     break;
+            }
+        });
+
+        editTxtDate.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {}
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                spClass.strSetSP("cDate", s.toString());
             }
         });
 
@@ -155,6 +175,14 @@ public class MainActivity extends AppCompatActivity {
 
         btnSearch.setOnClickListener(v->functionsapp.goSearchOrderActivity());
         btnSend.setOnClickListener(v->askSave());
+        btnConvertOrder.setOnClickListener(v-> new AlertDialog.Builder(this)
+                .setMessage("¿Estás seguro que quieres dar Entrada a la Orden?")
+                .setCancelable(true)
+                .setPositiveButton("Sí", (dialog, id) -> {
+                    backgroundProcess("convertOrder", "bar");
+                })
+                .setNegativeButton("No", null)
+                .show());
 
         backgroundProcess("downloadData", "bar");
 
@@ -167,51 +195,6 @@ public class MainActivity extends AppCompatActivity {
             setDetails();
         }
     }
-
-    /*ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0,  ItemTouchHelper.LEFT) {
-        @Override
-        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-            return false;
-        }
-
-        @Override
-        public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
-
-            if(simpleCallback.isItemViewSwipeEnabled()){
-                final int position = viewHolder.getAdapterPosition();
-
-                switch (direction) {
-                    case ItemTouchHelper.LEFT:
-
-                        realm.beginTransaction();
-                        realm.where(Detail.class).findAll().get(position).deleteFromRealm();
-                        realm.commitTransaction();
-
-                        setDetails();
-                        break;
-                }
-            }
-        }
-
-        @Override
-        public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-            new RecyclerViewSwipeDecorator.Builder(MainActivity.this, c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-                    .addSwipeLeftBackgroundColor(ContextCompat.getColor(MainActivity.this, android.R.color.holo_red_dark))
-                    .addSwipeLeftActionIcon(R.drawable.ico_delete)
-                    .setActionIconTint(ContextCompat.getColor(recyclerView.getContext(), android.R.color.white))
-                    .create()
-                    .decorate();
-
-            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-        }
-
-        @Override
-        public boolean isItemViewSwipeEnabled()
-        {
-            return true;
-        }
-
-    };*/
 
     public void add(){
         deleteData();
@@ -291,8 +274,8 @@ public class MainActivity extends AppCompatActivity {
                                                     Datos1.getString("articulo").trim(),
                                                     Datos1.getString("nombre_articulo").trim(),
                                                     Datos1.getDouble("cantidad"),
-                                                    Datos1.getDouble("precio"),
-                                                    Datos1.getDouble("cantidad") * Datos1.getDouble("precio")
+                                                    Datos1.getDouble("costo"),
+                                                    Datos1.getDouble("cantidad") * Datos1.getDouble("costo")
                                             );
 
                                             realm.copyToRealm(detail);
@@ -346,9 +329,21 @@ public class MainActivity extends AppCompatActivity {
     public void setData(){
         try{
 
-            String cObservations = "";
+            String cDate = "", cObservations = "", cSupplier = "";
 
+            cDate = spClass.strGetSP("cDate");
+            cSupplier = spClass.strGetSP("cSupplier");
             cObservations = spClass.strGetSP("cObservations");
+
+            if(!cSupplier.equals("ND")){
+                txtViewSupplier.setText(cSupplier);
+            }
+
+            if(!cDate.equals("ND")){
+                editTxtDate.setText(cDate);
+            }else{
+                editTxtDate.setText("");
+            }
 
             if(!cObservations.equals("ND")){
                 editTxtObservations.setText(cObservations);
@@ -444,6 +439,8 @@ public class MainActivity extends AppCompatActivity {
 
             if(spClass.intGetSP("nSupplier") == 0){
                 error = "Selecciona un proveedor";
+            }else if(editTxtDate.getText().toString().length() == 0){
+                error = "Selecciona una fecha de recepción";
             }else if(realm.where(Detail.class).findAll().size() == 0){
                 error = "Agrega mínimo un detalle";
             }else{
@@ -471,7 +468,7 @@ public class MainActivity extends AppCompatActivity {
                 ConnectionClass connectionClass = new ConnectionClass(getApplicationContext());
 
                 if (connectionClass.ConnectionMDS() != null) {
-                    PreparedStatement loComando = baseApp.execute_SP("EXECUTE ERP_CIE.dbo.Guarda_Orden_Compra_Android ?, ?, ?, ?, ?, ?, ?");
+                    PreparedStatement loComando = baseApp.execute_SP("EXECUTE ERP_CIE.dbo.Guarda_Orden_Compra_Android ?, ?, ?, ?, ?, ?, ?, ?");
 
                     if (loComando == null) {
                         baseApp.showSnackBar("Error al Crear SP Guarda_Orden_Compra_Android");
@@ -481,10 +478,11 @@ public class MainActivity extends AppCompatActivity {
                             loComando.setInt(1, spClass.intGetSP("sucursal"));
                             loComando.setInt(2, spClass.intGetSP("user"));
                             loComando.setInt(3, spClass.intGetSP("nSupplier"));
-                            loComando.setInt(4, spClass.intGetSP("cType"));
-                            loComando.setString(5, editTxtObservations.getText().toString());
-                            loComando.setString(6, generateSplitDetails()); //details
-                            loComando.setInt(7, spClass.intGetSP("nOrder"));
+                            loComando.setDate(4, baseApp.convertDateToSQLDate(baseApp.convertDateWOTime2(editTxtDate.getText().toString())));
+                            loComando.setString(5, spClass.strGetSP("cType"));
+                            loComando.setString(6, editTxtObservations.getText().toString());
+                            loComando.setString(7, generateSplitDetails()); //details
+                            loComando.setInt(8, spClass.intGetSP("nOrder"));
 
                             isResultSet = loComando.execute();
 
@@ -549,6 +547,98 @@ public class MainActivity extends AppCompatActivity {
         return stringSplit;
     }
 
+    public void updateLabelDate(){
+        BaseApp baseApp = new BaseApp(this);
+
+        try {
+            String myFormat = "dd/MM/yyyy"; //In which you need put here
+            SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+            editTxtDate.setText(sdf.format(myCalendar.getTime()));
+        }catch (Exception ex){
+            baseApp.showAlert("Error", "Reporta este error: " + ex);
+        }
+    }
+
+    public void showCalendar(){
+        DatePickerDialog.OnDateSetListener date = (view, year, monthOfYear, dayOfMonth) -> {
+            // TODO Auto-generated method stub
+            myCalendar.set(Calendar.YEAR, year);
+            myCalendar.set(Calendar.MONTH, monthOfYear);
+            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            updateLabelDate();
+        };
+
+        new DatePickerDialog(MainActivity.this, date, myCalendar
+                .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
+    public void convertOrder(){
+        try{
+            boolean isResultSet;
+            int countResults = 0, rowsCount = 0;
+
+            try {
+
+                ConnectionClass connectionClass = new ConnectionClass(getApplicationContext());
+
+                if (connectionClass.ConnectionMDS() != null) {
+                    PreparedStatement loComando = baseApp.execute_SP("EXECUTE ERP_CIE.dbo.Genera_Entrada_Orden ?, ?");
+
+                    if (loComando == null) {
+                        baseApp.showSnackBar("Error al Crear SP Genera_Entrada_Orden");
+                    } else {
+                        try {
+
+                            loComando.setInt(1, spClass.intGetSP("nOrder"));
+                            loComando.setInt(2, 0);
+
+                            isResultSet = loComando.execute();
+
+                            while (true) {
+                                if (isResultSet) {
+
+                                    if (countResults == 0) {
+                                        ResultSet Datos = loComando.getResultSet();
+                                        while (Datos.next()) {
+
+                                            if (Datos.getInt("exito") == 1) {
+                                                int nId = Datos.getInt("entrada");
+
+                                                baseApp.showAlert("Éxito", "Se ha generado con éxito la entrada #" + nId);
+                                                deleteData();
+                                            }
+                                        }
+
+                                        Datos.close();
+                                    }
+
+                                } else {
+                                    if (loComando.getUpdateCount() == -1) {
+                                        break;
+                                    }
+
+                                    baseApp.showLog("Result {} is just a count: {}" + countResults + ", " + loComando.getUpdateCount());
+                                }
+
+                                countResults++;
+                                isResultSet = loComando.getMoreResults();
+                            }
+                        } catch (Exception ex) {
+                            baseApp.showToast("Error al guardar");
+                            ex.printStackTrace();
+                        }
+                    }
+                }
+            }catch (Exception e) {
+                e.printStackTrace();
+                baseApp.showToast("Ocurrió el error" + e);
+            }
+        }catch (Exception ex){
+            baseApp.showToast("Ocurrió el error: "  + ex);
+        }
+    }
 
     public void backgroundProcess(String process, String typeLoad) {
 
@@ -582,6 +672,10 @@ public class MainActivity extends AppCompatActivity {
 
                             case "save":
                                 save();
+                                break;
+
+                            case "convertOrder":
+                                convertOrder();
                                 break;
 
                             default:

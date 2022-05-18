@@ -159,7 +159,7 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/txtViewProveedor"
+                            android:id="@+id/txtViewSupplier"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -177,6 +177,32 @@
                             android:background="@android:color/transparent"
                             app:srcCompat="@drawable/ico_chevron_right" />
                     </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/textView4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/montserrat"
+                        android:text="F. Promesa"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/editTxtDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:ems="10"
+                        android:focusable="false"
+                        android:fontFamily="@font/montserrat"
+                        android:hint="01/01/2001"
+                        android:inputType="date"
+                        android:textColor="@android:color/black"
+                        android:textSize="16dp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -311,7 +337,7 @@
                         android:textColor="@android:color/white" />
 
                     <Button
-                        android:id="@+id/btnEntrada"
+                        android:id="@+id/btnConvertOrder"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"

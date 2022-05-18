@@ -1,5 +1,6 @@
 package com.mds.ocapp.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,12 +10,15 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mds.ocapp.R;
+import com.mds.ocapp.activities.MainActivity;
 import com.mds.ocapp.application.BaseApp;
 import com.mds.ocapp.application.FunctionsApp;
 import com.mds.ocapp.application.SPClass;
 import com.mds.ocapp.models.Detail;
 
 import java.util.List;
+
+import io.realm.Realm;
 
 public class AdapterDetails extends RecyclerView.Adapter<AdapterDetails.DetailViewHolder>
         implements View.OnClickListener{
@@ -23,6 +27,8 @@ public class AdapterDetails extends RecyclerView.Adapter<AdapterDetails.DetailVi
     private View.OnClickListener listener;
 
     private List<Detail> listDetails;
+
+    Realm realm;
 
     public AdapterDetails(Context context, List<Detail> listDetails) {
         this.context = context;
@@ -43,10 +49,26 @@ public class AdapterDetails extends RecyclerView.Adapter<AdapterDetails.DetailVi
         final SPClass spClass = new SPClass(context);
         final BaseApp baseApp = new BaseApp(context);
 
+        baseApp.setUpRealmConfig();
+
+        Realm.init(context);
+        realm = Realm.getDefaultInstance();
+
         holder.txtViewArticle.setText(listDetails.get(position).getNombre_articulo().trim());
         holder.txtViewAmount.setText("" + listDetails.get(position).getCantidad());
         holder.txtViewPrice.setText("$" + listDetails.get(position).getPrecio());
         holder.txtViewTotal.setText("$" + listDetails.get(position).getImporte());
+
+        holder.txtViewArticle.setOnLongClickListener(v -> {
+
+            realm.beginTransaction();
+            realm.where(Detail.class).findAll().get(position).deleteFromRealm();
+            realm.commitTransaction();
+
+            ((MainActivity) (context)).setDetails();
+
+            return false;
+        });
 
     }
 
