@@ -21,10 +21,18 @@
         <entry key="..\:/Desarrollo_Android/OCApp/app/src/main/res/menu/menu_main.xml" value="0.1" />
         <entry key="..\:/Desarrollo_Android/OCApp/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />
         <entry key="..\:/Desarrollo_Android/OCApp/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1" />
+        <entry key="..\:/Dev/Android/OCApp/app/src/main/res/drawable/launch_screen.xml" value="0.227" />
+        <entry key="..\:/Dev/Android/OCApp/app/src/main/res/layout/activity_about.xml" value="0.32653985507246375" />
+        <entry key="..\:/Dev/Android/OCApp/app/src/main/res/layout/activity_add_article.xml" value="0.32653985507246375" />
+        <entry key="..\:/Dev/Android/OCApp/app/src/main/res/layout/activity_login.xml" value="0.32653985507246375" />
+        <entry key="..\:/Dev/Android/OCApp/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/Dev/Android/OCApp/app/src/main/res/layout/activity_restore_dbbackup.xml" value="0.32653985507246375" />
+        <entry key="..\:/Dev/Android/OCApp/app/src/main/res/layout/activity_search_order.xml" value="0.32653985507246375" />
+        <entry key="..\:/Dev/Android/OCApp/app/src/main/res/layout/activity_select_supplier.xml" value="0.32653985507246375" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
